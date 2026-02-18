@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">关于代码库维护助手</h2>
+            <p class="card-text">代码库维护助手是一个智能的工具，帮助开发者更有效地管理和维护代码库。</p>
+            
+            <h3 class="mt-4">技术特点</h3>
+            <ul class="list-group list-group-flush mt-2">
+                <li class="list-group-item">
+                    <strong>长程任务支持</strong>
+                    <p class="mt-1">通过 NoteTool 实现跨会话的状态管理，适合持续数天的重构任务。</p>
+                </li>
+                <li class="list-group-item">
+                    <strong>智能上下文</strong>
+                    <p class="mt-1">通过 ContextBuilder 构建优化的上下文，确保高信号密度，避免信息过载。</p>
+                </li>
+                <li class="list-group-item">
+                    <strong>按需探索</strong>
+                    <p class="mt-1">通过 TerminalTool 实现即时、按需的代码探索，只在需要时查看具体文件。</p>
+                </li>
+            </ul>
+            
+            <h3 class="mt-4">文件说明</h3>
+            <ul class="mt-2">
+                <li><strong>main.py</strong>: 包含 CodebaseMaintainer 类，是核心功能实现</li>
+                <li><strong>use.py</strong>: 使用示例，展示如何在命令行中使用 CodebaseMaintainer</li>
+                <li><strong>web_app.py</strong>: Web 应用，提供可视化界面</li>
+                <li><strong>my_flask_app/</strong>: 示例代码库，用于演示分析功能</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

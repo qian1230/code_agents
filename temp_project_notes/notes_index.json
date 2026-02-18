@@ -1,0 +1,30 @@
+{
+  "notes": [
+    {
+      "id": "note_20260217_205200_0",
+      "title": "发现问题: 请分析以下代码文件的质量和潜在问题：\n\n文件名: react...",
+      "type": "blocker",
+      "tags": [
+        "temp_project",
+        "auto_detected",
+        "session_20260217_205051"
+      ],
+      "created_at": "2026-02-17T20:52:00.709578"
+    },
+    {
+      "id": "note_20260218_092925_1",
+      "title": "发现问题: 请分析以下代码文件的质量和潜在问题：\n\n文件名: main....",
+      "type": "blocker",
+      "tags": [
+        "temp_project",
+        "auto_detected",
+        "session_20260218_092812"
+      ],
+      "created_at": "2026-02-18T09:29:25.801999"
+    }
+  ],
+  "metadata": {
+    "created_at": "2026-02-17T19:15:49.963417",
+    "total_notes": 2
+  }
+}

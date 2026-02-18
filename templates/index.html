@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">代码库维护助手</h2>
+            <p class="card-text">一个智能的代码库维护工具，帮助您探索代码结构、分析代码质量、规划重构任务。</p>
+            
+            <h3 class="mt-4">核心功能</h3>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">📦 分析 my_flask_app</h5>
+                            <p class="card-text">自动分析 my_flask_app 目录下的代码库，包括代码结构探索、质量分析和任务规划。</p>
+                            <a href="/analyze-my-flask-app" class="btn btn-primary">开始分析</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">📤 上传代码文件</h5>
+                            <p class="card-text">上传单个代码文件进行分析，支持 Python 等常见编程语言的质量分析。</p>
+                            <a href="/upload" class="btn btn-success">上传文件</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-4">关于 use.py</h3>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p><code>use.py</code> 是一个使用示例，展示了如何使用 <code>CodebaseMaintainer</code> 类来维护代码库。</p>
+                    <p>本 Web 应用基于相同的 <code>CodebaseMaintainer</code> 类，提供了可视化的界面来执行相同的功能。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

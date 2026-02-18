@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">上传代码文件</h2>
+            <p class="card-text">上传单个代码文件进行分析，支持 Python 等常见编程语言。</p>
+            
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">选择文件</label>
+                    <input type="file" class="form-control" id="file" name="file" required>
+                </div>
+                <button type="submit" class="btn btn-primary">上传并分析</button>
+            </form>
+            
+            <div id="realtime-output" class="mt-4 p-3 bg-light rounded border" style="white-space: pre-wrap; word-wrap: break-word; max-height: 320px; overflow-y: auto;">
+    <h4>实时输出</h4>
+    <div id="output-content" class="mt-2">
+        <p>选择文件并点击上传按钮开始分析...</p>
+    </div>
+</div>
+            
+            <div id="result" class="mt-4 d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>分析结果</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="result-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('result-content');
+            const outputContent = document.getElementById('output-content');
+            
+            // 显示实时输出
+            outputContent.innerHTML = '<p>正在上传文件...</p>';
+            
+            resultContent.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">分析中...</span></div><p class="mt-2">正在分析代码，请稍候...</p></div>';
+            resultDiv.classList.remove('d-none');
+            
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    outputContent.innerHTML += '<p>✅ 文件上传成功！</p>';
+                    outputContent.innerHTML += '<p>📊 分析完成！</p>';
+                    resultContent.innerHTML = `
+                        <p class="text-success">✅ 文件 <strong>${data.filename}</strong> 已成功上传并分析</p>
+                        <div class="result-block">
+                            ${data.response.replace(/\n/g, '<br>')}
+                        </div>
+                    `;
+                } else {
+                    outputContent.innerHTML += `<p class="text-danger">❌ ${data.message}</p>`;
+                    resultContent.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                outputContent.innerHTML += `<p class="text-danger">❌ 上传失败: ${error.message}</p>`;
+                resultContent.innerHTML = `<div class="alert alert-danger">❌ 上传失败: ${error.message}</div>`;
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ data.title }}</h2>
+            
+            {% for step in data.steps %}
+                <div class="card step-card">
+                    <div class="card-header">
+                        <h4>{{ step.name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="step-description">{{ step.description }}</p>
+                        <div class="result-block">
+                            {{ step.result|replace('
+', '<br>')|safe }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <div class="mt-4">
+                <a href="/plan" class="btn btn-primary">下一步：规划重构任务</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

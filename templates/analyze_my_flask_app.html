@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">分析 my_flask_app</h2>
+            <p class="card-text">自动分析 my_flask_app 目录下的代码库，包括代码结构探索、质量分析和任务规划。</p>
+            
+            <button id="analyze-btn" class="btn btn-primary btn-lg">开始分析 my_flask_app</button>
+            <button id="clear-btn" class="btn btn-secondary btn-lg ml-2">清除输出</button>
+            
+           <div id="realtime-output" class="mt-4 p-3 bg-light rounded border" style="white-space: pre-wrap; word-wrap: break-word; max-height: 320px; overflow-y: auto;">
+    <h4>实时输出</h4>
+    <div id="output-content" class="mt-2">
+        <p>点击上方按钮开始分析...</p>
+    </div>
+</div>
+            
+            <div id="results" class="mt-4 d-none">
+                <h3>分析结果</h3>
+                <div id="results-content"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let sessionId = 'session_' + Date.now();
+        let eventSource = null;
+        
+        // 清除输出
+        document.getElementById('clear-btn').addEventListener('click', function() {
+            document.getElementById('output-content').innerHTML = '<p>点击上方按钮开始分析...</p>';
+            fetch(`/api/clear-stream/${sessionId}`, {
+                method: 'POST'
+            });
+        });
+        
+        // 开始分析
+        document.getElementById('analyze-btn').addEventListener('click', function() {
+            const btn = this;
+            const resultsDiv = document.getElementById('results');
+            const resultsContent = document.getElementById('results-content');
+            const outputContent = document.getElementById('output-content');
+            
+            // 生成新的会话ID
+            sessionId = 'session_' + Date.now();
+            
+            // 清除之前的输出
+            outputContent.innerHTML = '<p>开始分析...</p>';
+            
+            // 启动SSE连接
+            if (eventSource) {
+                eventSource.close();
+            }
+            eventSource = new EventSource(`/api/stream/${sessionId}`);
+            
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'message' || data.type === 'info') {
+                        const p = document.createElement('p');
+                        p.textContent = data.message;
+                        outputContent.appendChild(p);
+                        // 滚动到底部
+                        outputContent.scrollTop = outputContent.scrollHeight;
+                    }
+                } catch (e) {
+                    console.error('Error parsing SSE message:', e);
+                }
+            };
+            
+            eventSource.onerror = function() {
+                eventSource.close();
+            };
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 分析中...';
+            resultsDiv.classList.remove('d-none');
+            resultsContent.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">分析中...</span></div><p class="mt-2">正在分析代码库，请稍候...</p></div>';
+            
+            fetch('/api/analyze-my-flask-app', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ session_id: sessionId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    let html = '';
+                    data.results.forEach(result => {
+                        html += `
+                            <div class="card step-card">
+                                <div class="card-header">
+                                    <h4>${result.step}</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="result-block">
+                                        ${result.response.replace(/\n/g, '<br>')}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    resultsContent.innerHTML = html;
+                } else {
+                    resultsContent.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+                btn.disabled = false;
+                btn.innerHTML = '重新分析';
+                // 关闭SSE连接
+                if (eventSource) {
+                    eventSource.close();
+                }
+            })
+            .catch(error => {
+                resultsContent.innerHTML = `<div class="alert alert-danger">❌ 分析失败: ${error.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = '重新分析';
+                // 关闭SSE连接
+                if (eventSource) {
+                    eventSource.close();
+                }
+            });
+        });
+    </script>
+{% endblock %}
