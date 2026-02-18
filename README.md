@@ -6,6 +6,11 @@
 
 `code_agent` 是一个演示性质的智能体应用，旨在展示如何利用长程智能体（Long-context Agents）技术来辅助软件工程任务。通过集成 `hello_agents` 框架的记忆（Memory）、工具（Tools）和上下文管理（Context Builder）能力，它能够理解复杂的代码结构并给出专业的维护建议。
 
+## 项目效果展示
+![系统运行效果](https://github.com/qian1230/code_agents/blob/main/img1.png)
+![系统运行效果](https://github.com/qian1230/code_agents/blob/main/img2.png)
+![系统运行效果](https://github.com/qian1230/code_agents/blob/main/img3.png)
+
 ## ✨ 功能特性
 
 - **可视化交互**: 基于 Flask 构建的 Web 界面，操作直观便捷。
@@ -93,4 +98,9 @@ code_agent/
 4. **查看报告**: 分析完成后，页面将展示结构化的分析结果和建议。
 
 ---
-Powered by [hello_llm](..)
+Powered by [hello_llm](https://github.com/datawhalechina/hello-agents)
+
+
+## 联系方式
+
+如有问题，请联系18612214266@163.com
